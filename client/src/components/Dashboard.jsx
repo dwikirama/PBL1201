@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Edit2, Trash2, LogOut, FileText } from "lucide-react";
+import { Plus, Edit2, Trash2, LogOut, FileText, Search } from "lucide-react";
 
 const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout, onViewLogs }) => {
   const [newCar, setNewCar] = useState({
@@ -11,131 +11,179 @@ const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout,
 
   const handleAddSubmit = (e) => {
     e.preventDefault();
-
     if (!newCar.merek || !newCar.model || !newCar.tahun || !newCar.warna) {
       alert("Semua field harus diisi!");
       return;
     }
-
     onAddCar(newCar);
     setNewCar({ merek: "", model: "", tahun: "", warna: "" });
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
-          <span className="font-semibold text-gray-900">CarData Manager</span>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
-              Halo, <strong>{username}</strong>
-            </span>
-            <button onClick={onViewLogs} className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 transition-colors">
-              <FileText size={16} />
-              Audit Logs
-            </button>
-            <button onClick={onLogout} className="px-3 py-1.5 text-xs border border-red-300 text-red-600 rounded hover:bg-red-50 flex items-center gap-1 transition-colors">
-              <LogOut size={14} />
-              Keluar
+    <div className="min-h-screen bg-[#f9f5ff]">
+      {/* Navbar Modern */}
+      <nav className="bg-[#14248a] text-white px-6 py-4 shadow-lg">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <span className="font-bold text-xl tracking-wide">CarData Manager</span>
+          <div className="flex items-center gap-6">
+            <div className="text-right hidden sm:block">
+              <p className="text-xs text-[#d4c2fc]">Login sebagai</p>
+              <p className="font-semibold text-sm">{username}</p>
+            </div>
+            <div className="h-8 w-px bg-[#998fc7]/30"></div>
+            <button 
+              onClick={onLogout} 
+              className="flex items-center gap-2 text-sm font-medium text-[#d4c2fc] hover:text-white transition-colors"
+            >
+              <LogOut size={18} /> Keluar
             </button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
-        {/* Form Tambah Unit */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 mb-8 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Tambah Unit Baru</h3>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <input
-              type="text"
-              className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="Merek (ex: Toyota)"
-              value={newCar.merek}
-              onChange={(e) => setNewCar({ ...newCar, merek: e.target.value })}
-            />
-            <input
-              type="text"
-              className="col-span-3 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="Model (ex: Avanza)"
-              value={newCar.model}
-              onChange={(e) => setNewCar({ ...newCar, model: e.target.value })}
-            />
-            <input
-              type="number"
-              className="col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="Tahun"
-              value={newCar.tahun}
-              onChange={(e) => setNewCar({ ...newCar, tahun: e.target.value })}
-            />
-            <input
-              type="text"
-              className="col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="Warna"
-              value={newCar.warna}
-              onChange={(e) => setNewCar({ ...newCar, warna: e.target.value })}
-            />
-            <button onClick={handleAddSubmit} className="col-span-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-1 transition-colors shadow-sm">
-              <Plus size={16} />
-              Simpan
-            </button>
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        
+        {/* Header Content */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[#28262c]">Dashboard Mobil</h1>
+            <p className="text-[#998fc7] mt-1">Kelola inventaris kendaraan dengan mudah.</p>
           </div>
+          <button 
+            onClick={onViewLogs} 
+            className="flex items-center gap-2 bg-white text-[#14248a] border border-[#d4c2fc] px-5 py-2.5 rounded-xl font-medium hover:bg-[#f9f5ff] transition-all shadow-sm"
+          >
+            <FileText size={18} />
+            Lihat Log Aktivitas
+          </button>
         </div>
 
-        {/* Header Tabel */}
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Daftar Inventaris</h3>
-          <span className="text-sm text-gray-500">Total: {cars.length} unit</span>
-        </div>
-
-        {/* Tabel Data */}
-        {cars.length > 0 ? (
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-200">
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase w-12">#</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase">Merek</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase">Model</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase">Tahun</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase">Warna</th>
-                    <th className="px-6 py-4 text-center text-xs font-medium text-gray-600 uppercase">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cars.map((car, index) => (
-                    <tr key={car.token || car.id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-500">{index + 1}</td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">{car.merek}</td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{car.model}</td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{car.tahun}</td>
-                      <td className="px-6 py-4">
-                        <span className="inline-block px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200 rounded">{car.warna}</span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <button onClick={() => onEditCar(car)} className="text-blue-600 hover:text-blue-800 font-medium text-sm mr-4 inline-flex items-center gap-1">
-                          <Edit2 size={14} />
-                          Edit
-                        </button>
-                        <button onClick={() => onDeleteCar(car)} className="text-red-600 hover:text-red-800 font-medium text-sm inline-flex items-center gap-1">
-                          <Trash2 size={14} />
-                          Hapus
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Form Tambah Data (Kiri) */}
+          <div className="lg:col-span-1">
+            <div className="bg-white p-6 rounded-2xl shadow-md border border-[#d4c2fc]">
+              <h2 className="text-lg font-bold text-[#28262c] mb-6 flex items-center gap-2">
+                <div className="p-2 bg-[#f9f5ff] rounded-lg text-[#14248a]">
+                  <Plus size={20} />
+                </div>
+                Tambah Unit Baru
+              </h2>
+              <form onSubmit={handleAddSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#998fc7] uppercase tracking-wider mb-1">Merek</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-[#d4c2fc] rounded-lg focus:ring-2 focus:ring-[#998fc7] focus:border-[#14248a] outline-none"
+                    placeholder="Contoh: Toyota"
+                    value={newCar.merek}
+                    onChange={(e) => setNewCar({ ...newCar, merek: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#998fc7] uppercase tracking-wider mb-1">Model</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-[#d4c2fc] rounded-lg focus:ring-2 focus:ring-[#998fc7] focus:border-[#14248a] outline-none"
+                    placeholder="Contoh: Avanza"
+                    value={newCar.model}
+                    onChange={(e) => setNewCar({ ...newCar, model: e.target.value })}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#998fc7] uppercase tracking-wider mb-1">Tahun</label>
+                    <input
+                      type="number"
+                      className="w-full px-4 py-2 border border-[#d4c2fc] rounded-lg focus:ring-2 focus:ring-[#998fc7] focus:border-[#14248a] outline-none"
+                      placeholder="2023"
+                      value={newCar.tahun}
+                      onChange={(e) => setNewCar({ ...newCar, tahun: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#998fc7] uppercase tracking-wider mb-1">Warna</label>
+                    <input
+                      type="text"
+                      className="w-full px-4 py-2 border border-[#d4c2fc] rounded-lg focus:ring-2 focus:ring-[#998fc7] focus:border-[#14248a] outline-none"
+                      placeholder="Hitam"
+                      value={newCar.warna}
+                      onChange={(e) => setNewCar({ ...newCar, warna: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <button 
+                  type="submit" 
+                  className="w-full mt-4 bg-[#14248a] text-white py-3 rounded-xl font-bold hover:bg-[#28262c] transition-all shadow-md"
+                >
+                  Simpan Data
+                </button>
+              </form>
             </div>
           </div>
-        ) : (
-          <div className="bg-white rounded-lg border border-gray-200 py-12 text-center shadow-sm">
-            <p className="text-gray-500">Belum ada data tersedia.</p>
-            <p className="text-sm text-gray-400 mt-2">Tambahkan unit baru menggunakan form di atas.</p>
+
+          {/* Tabel Data (Kanan) */}
+          <div className="lg:col-span-2">
+            {cars.length > 0 ? (
+              <div className="bg-white rounded-2xl shadow-md border border-[#d4c2fc] overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-[#f9f5ff]">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-[#14248a] uppercase tracking-wider">Merek & Model</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-[#14248a] uppercase tracking-wider">Tahun</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-[#14248a] uppercase tracking-wider">Warna</th>
+                        <th className="px-6 py-4 text-center text-xs font-bold text-[#14248a] uppercase tracking-wider">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#f9f5ff]">
+                      {cars.map((car) => (
+                        <tr key={car.token} className="hover:bg-[#f9f5ff]/50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="font-bold text-[#28262c]">{car.merek}</div>
+                            <div className="text-sm text-[#998fc7]">{car.model}</div>
+                          </td>
+                          <td className="px-6 py-4 text-sm font-medium text-[#28262c]">{car.tahun}</td>
+                          <td className="px-6 py-4">
+                            <span className="inline-block px-3 py-1 text-xs font-medium bg-[#f9f5ff] text-[#14248a] border border-[#d4c2fc] rounded-full">
+                              {car.warna}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <div className="flex justify-center gap-2">
+                              <button 
+                                onClick={() => onEditCar(car)} 
+                                className="p-2 text-[#998fc7] hover:text-[#14248a] hover:bg-[#f9f5ff] rounded-lg transition-colors"
+                                title="Edit"
+                              >
+                                <Edit2 size={18} />
+                              </button>
+                              <button 
+                                onClick={() => onDeleteCar(car)} 
+                                className="p-2 text-[#998fc7] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Hapus"
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl border border-[#d4c2fc] border-dashed py-16 text-center">
+                <div className="bg-[#f9f5ff] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search size={32} className="text-[#998fc7]" />
+                </div>
+                <p className="text-[#28262c] font-medium">Belum ada data tersedia.</p>
+                <p className="text-sm text-[#998fc7] mt-1">Tambahkan unit baru menggunakan form di samping.</p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

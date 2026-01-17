@@ -1,10 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pbl1201</title>
+    <title>Tugas PBL1201 - Tadika Mesra</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              // Warna Tema Tadika Mesra (Landing Page)
+              'black-custom': '#0a0908',
+              'chocolate-cosmos': '#49111c',
+              'white-smoke': '#f2f4f3',
+              'beaver': '#a9927d',
+              'walnut-brown': '#5e503f',
+              
+              // Warna Tema Dashboard Mobil (Tetap ada biar dashboard aman)
+              'shadow-grey': '#28262c',
+              'soft-periwinkle': '#998fc7',
+              'periwinkle': '#d4c2fc',
+              'lavender-mist': '#f9f5ff',
+              'true-cobalt': '#14248a',
+            },
+            fontFamily: {
+              // Font Khusus Tadika Mesra
+              'playfair': ['"Playfair Display"', 'serif'],
+              'lato': ['"Lato"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        /* Default font dashboard */
+        font-family: 'Lato', sans-serif; 
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

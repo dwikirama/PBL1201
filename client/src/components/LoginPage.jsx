@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CarFront } from "lucide-react";
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -8,9 +8,7 @@ const LoginPage = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const result = onLogin(username, password);
-
     if (!result.success) {
       setError(result.error);
     } else {
@@ -19,11 +17,14 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white p-10 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[#f9f5ff]">
+      <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-[#d4c2fc]">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">CarData Portal</h1>
-          <p className="text-sm text-gray-600">Silakan masuk untuk mengelola data</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#f9f5ff] mb-4">
+            <CarFront size={32} className="text-[#14248a]" />
+          </div>
+          <h1 className="text-3xl font-bold text-[#14248a] mb-2">CarData Portal</h1>
+          <p className="text-sm text-[#998fc7]">Silakan masuk untuk mengelola data</p>
         </div>
 
         {error && (
@@ -33,37 +34,38 @@ const LoginPage = ({ onLogin }) => {
           </div>
         )}
 
-        <div className="text-left">
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
-            <input
-              type="text"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="Masukkan username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <input
-              type="password"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <button onClick={handleSubmit} className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-            Masuk ke Dashboard
-          </button>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-[#28262c] mb-2">Username</label>
+          <input
+            type="text"
+            className="w-full px-4 py-3 border border-[#d4c2fc] rounded-xl focus:ring-2 focus:ring-[#998fc7] focus:border-[#14248a] outline-none transition-all"
+            placeholder="Masukkan username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-6">© 2024 CarData Corp. All rights reserved.</p>
+        <div className="mb-8">
+          <label className="block text-sm font-medium text-[#28262c] mb-2">Password</label>
+          <input
+            type="password"
+            className="w-full px-4 py-3 border border-[#d4c2fc] rounded-xl focus:ring-2 focus:ring-[#998fc7] focus:border-[#14248a] outline-none transition-all"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-        <p className="text-center text-xs text-gray-500 mt-4 bg-yellow-50 p-2 rounded">Demo: admin / admin123</p>
+        <button 
+          onClick={handleSubmit} 
+          className="w-full bg-[#14248a] text-white py-3 rounded-xl font-bold hover:bg-[#28262c] transition-colors shadow-lg shadow-[#14248a]/20"
+        >
+          Masuk ke Dashboard
+        </button>
+
+        <p className="text-center text-xs text-[#998fc7] mt-8">
+          © 2026 CarData System
+        </p>
       </div>
     </div>
   );
