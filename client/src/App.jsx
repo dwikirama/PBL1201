@@ -1,64 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate, Navigate, useParams, Link } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate, useParams } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Dashboard from "./components/Dashboard";
 import EditPage from "./components/EditPage";
 import LogsPage from "./components/LogsPage";
 import "./App.css";
 
-const API_URL = "http://localhost:5000"; 
+const API_URL = "http://localhost:5000"; // URL Backend Express
 
-const teamMembers = ['Yurida Zani', 'Aulia Zamaira', 'Muhammad Dwiki Ramadani', 'Dimas Hammam Abdillah', 'Ali Sofyan'];
+const teamMembers = ["Yurida Zani", "Aulia Zamaira", "Muhammad Dwiki Ramadani", "Dimas Hammam Abdillah", "Ali Sofyan"];
 
-const Landing = () => (
-  <div className="relative w-full min-h-screen font-lato text-white-smoke overflow-hidden">
-    <img 
-      src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070" 
-      alt="Mountain background"
-      className="absolute top-0 left-0 object-cover w-full h-full"
-    />
-    
-    <div className="absolute top-0 left-0 w-full h-full bg-black-custom opacity-60"></div>
-    
-    <div className="relative z-10 flex flex-col items-center justify-center w-full min-h-screen p-8 text-center">
-      
-      <h1 className="text-6xl font-bold md:text-8xl font-playfair tracking-tight">
-        Tadika Mesra
-      </h1>
-      
-      <h2 className="mt-2 text-2xl md:text-3xl font-bold tracking-widest uppercase text-beaver">
-        TUGAS PBL1201
-      </h2>
-
-      <p className="max-w-2xl mt-6 text-lg md:text-xl text-white-smoke/90 font-light leading-relaxed">
-        Aplikasi Manajemen Data Mobil yang dibangun menggunakan React, Express, dan SQLite.
-      </p>
-      
-      <div className="mt-12">
-        <Link 
-          to="/pbl1201" 
-          className="px-10 py-4 text-lg font-bold text-center text-white transition-all duration-300 transform bg-chocolate-cosmos rounded-full hover:scale-105 hover:bg-[#5a1a25] shadow-2xl border-2 border-white/10 hover:border-beaver"
-        >
-          MASUK KE APLIKASI
-        </Link>
-      </div>
-
-      {/* FOOTER ANGGOTA */}
-      <div className="mt-20">
-        <h3 className="tracking-[0.2em] uppercase text-beaver text-sm font-bold mb-4">DIBANGUN OLEH</h3>
-        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-          {teamMembers.map((member, index) => (
-            <span key={index} className="text-sm md:text-base font-medium text-white-smoke/80 hover:text-white transition-colors cursor-default">
-              {member}
-            </span>
-          ))}
+const Landing = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="relative w-full min-h-screen font-lato text-white-smoke overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070" alt="Mountain background" className="absolute top-0 left-0 object-cover w-full h-full" />
+      <div className="absolute top-0 left-0 w-full h-full bg-black-custom opacity-60"></div>
+      <div className="relative z-10 flex flex-col items-center justify-center w-full min-h-screen p-8 text-center">
+        <h1 className="text-6xl font-bold md:text-8xl font-playfair tracking-tight">Tadika Mesra</h1>
+        <h2 className="mt-2 text-2xl md:text-3xl font-bold tracking-widest uppercase text-beaver">TUGAS PBL1201</h2>
+        <p className="max-w-2xl mt-6 text-lg md:text-xl text-white-smoke/90 font-light leading-relaxed">Aplikasi Manajemen Data Mobil yang dibangun menggunakan React, Express, dan SQLite.</p>
+        <div className="mt-12">
+          <button
+            onClick={() => navigate("/pbl1201")}
+            className="px-10 py-4 text-lg font-bold text-center text-white transition-all duration-300 transform bg-chocolate-cosmos rounded-full hover:scale-105 hover:bg-[#5a1a25] shadow-2xl border-2 border-white/10 hover:border-beaver"
+          >
+            MASUK KE APLIKASI
+          </button>
+        </div>
+        {/* FOOTER ANGGOTA */}
+        <div className="mt-20">
+          <h3 className="tracking-[0.2em] uppercase text-beaver text-sm font-bold mb-4">DIBANGUN OLEH</h3>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {teamMembers.map((member, index) => (
+              <span key={index} className="text-sm md:text-base font-medium text-white-smoke/80 hover:text-white transition-colors cursor-default">
+                {member}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-// Wrapper Edit Page (Tetap sama)
+// Wrapper Edit Page (Gabung dari kedua versi, pakai styling versi kedua untuk error)
 const EditPageWrapper = ({ cars, onUpdate, onCancel }) => {
   const { token } = useParams();
   const carToEdit = cars.find((c) => c.token === token);
@@ -85,109 +71,145 @@ function App() {
   const [logs, setLogs] = useState([]);
   const navigate = useNavigate();
 
+  // LOAD DATA DARI BACKEND
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) setLoggedInUser(savedUser);
+    const user = localStorage.getItem("loggedInUser");
+    if (user) {
+      setLoggedInUser(user);
+      fetchCars(); // Ambil data mobil dari server
+    }
   }, []);
 
+  // Fungsi ambil data Mobil
   const fetchCars = async () => {
     try {
-      const res = await fetch(`${API_URL}/cars`);
-      const data = await res.json();
+      const response = await fetch(`${API_URL}/cars`);
+      const data = await response.json();
       setCars(data);
     } catch (error) {
-      console.error("Gagal ambil data:", error);
+      console.error("Gagal ambil data mobil:", error);
     }
   };
 
+  // Fungsi ambil Logs
   const fetchLogs = async () => {
     try {
-      const res = await fetch(`${API_URL}/logs`);
-      const data = await res.json();
+      const response = await fetch(`${API_URL}/logs`);
+      const data = await response.json();
       setLogs(data);
     } catch (error) {
       console.error("Gagal ambil logs:", error);
     }
   };
 
-  useEffect(() => {
-    if (loggedInUser) {
-      fetchCars();
-    }
-  }, [loggedInUser]);
-
-  const handleLogin = (username, password) => {
-    if (username === "admin" && password === "admin123") {
-      setLoggedInUser(username);
-      localStorage.setItem("user", username);
-      
-      fetch(`${API_URL}/logs`, {
+  // HANDLE LOGIN (Pakai API versi pertama, tambah log seperti versi kedua)
+  const handleLogin = async (username, password) => {
+    try {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "LOGIN",
-          details: `User ${username} berhasil masuk`,
-          username: username
-        })
+        body: JSON.stringify({ username, password }),
       });
+      const data = await response.json();
 
-      navigate("/pbl1201/dashboard");
-      return { success: true };
+      if (data.success) {
+        setLoggedInUser(data.username);
+        localStorage.setItem("loggedInUser", data.username);
+        // Tambah log login seperti versi kedua
+        await fetch(`${API_URL}/logs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "LOGIN",
+            details: `User ${data.username} berhasil masuk`,
+            username: data.username,
+          }),
+        });
+        fetchCars(); // Load data setelah login
+        navigate("/pbl1201/dashboard");
+        return { success: true };
+      } else {
+        return { success: false, error: data.message };
+      }
+    } catch (error) {
+      return { success: false, error: "Server Error" };
     }
-    return { success: false, error: "Username atau password salah!" };
   };
 
+  // HANDLE LOGOUT
   const handleLogout = () => {
     setLoggedInUser("");
-    localStorage.removeItem("user");
+    localStorage.removeItem("loggedInUser");
+    setCars([]); // Kosongkan data di frontend
     navigate("/pbl1201/login");
   };
 
-  const handleAddCar = async (newCar) => {
+  // ADD CAR (Pakai body JSON versi pertama)
+  const handleAddCar = async (carData) => {
     try {
-        const res = await fetch(`${API_URL}/cars?username=${loggedInUser}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newCar),
-        });
-        if (res.ok) fetchCars();
+      await fetch(`${API_URL}/cars`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...carData, username: loggedInUser }), // Kirim username untuk log
+      });
+      fetchCars(); // Refresh data tabel
     } catch (error) {
-        console.error("Error add car:", error);
+      console.error("Error adding car:", error);
     }
   };
 
+  // UPDATE CAR (Pakai body JSON versi pertama, debug log)
   const handleUpdateCar = async (updatedCar) => {
     try {
-        const res = await fetch(`${API_URL}/cars/${updatedCar.token}?username=${loggedInUser}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedCar),
-        });
-        if (res.ok) {
-            fetchCars();
-            navigate("/pbl1201/dashboard");
-        }
+      const response = await fetch(`${API_URL}/cars/${updatedCar.token}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          merek: updatedCar.merek,
+          model: updatedCar.model,
+          tahun: updatedCar.tahun,
+          warna: updatedCar.warna,
+          username: loggedInUser, // Pastikan username dikirim
+        }),
+      });
+
+      const result = await response.json();
+      console.log("Update result:", result); // Untuk debugging
+
+      fetchCars();
+      navigate("/pbl1201/dashboard");
     } catch (error) {
-        console.error("Error update car:", error);
+      console.error("Error updating:", error);
     }
   };
 
+  // DELETE CAR (Pakai ?username seperti versi pertama)
   const handleDeleteCar = async (car) => {
-    if (window.confirm(`Yakin ingin menghapus ${car.merek}?`)) {
-        try {
-            const res = await fetch(`${API_URL}/cars/${car.token}?username=${loggedInUser}`, {
-                method: "DELETE",
-            });
-            if (res.ok) fetchCars();
-        } catch (error) {
-            console.error("Error delete car:", error);
-        }
+    if (window.confirm("Hapus data ini?")) {
+      try {
+        await fetch(`${API_URL}/cars/${car.token}?username=${loggedInUser}`, {
+          method: "DELETE",
+        });
+        fetchCars();
+      } catch (error) {
+        console.error("Error deleting:", error);
+      }
     }
   };
 
+  // Protected Route (Dikembalikan ke versi dengan pesan custom, styling disesuaikan, teks persis seperti request)
   const ProtectedRoute = ({ children }) => {
+    const navigate = useNavigate(); // Gunakan useNavigate di sini
     if (!loggedInUser) {
-      return <Navigate to="/pbl1201/login" replace />;
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#f9f5ff] text-[#28262c]">
+          <h1 className="text-3xl font-bold mb-4 text-[#14248a]">An authorized access</h1>
+          <p className="text-[#998fc7] mb-6">Anda tidak memiliki akses ke halaman ini.</p>
+          <button onClick={() => navigate("/pbl1201/login")} className="px-4 py-2 bg-[#14248a] text-white rounded hover:bg-[#28262c] transition-colors">
+            Silakan Login
+          </button>
+        </div>
+      );
     }
     return children;
   };
@@ -200,7 +222,7 @@ function App() {
       {/* Redirect /pbl1201 ke dashboard/login */}
       <Route path="/pbl1201" element={<Navigate to={loggedInUser ? "/pbl1201/dashboard" : "/pbl1201/login"} replace />} />
 
-      {/* App Routes */}
+      {/* App Routes dengan prefix /pbl1201 */}
       <Route path="/pbl1201/login" element={<LoginPage onLogin={handleLogin} />} />
 
       <Route
@@ -215,7 +237,7 @@ function App() {
               onDeleteCar={handleDeleteCar}
               onLogout={handleLogout}
               onViewLogs={() => {
-                fetchLogs();
+                fetchLogs(); // Ambil log terbaru saat tombol diklik
                 navigate("/pbl1201/logs");
               }}
             />

@@ -15,7 +15,7 @@ const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout,
       alert("Semua field harus diisi!");
       return;
     }
-    onAddCar(newCar);
+    onAddCar({ ...newCar, username: username });
     setNewCar({ merek: "", model: "", tahun: "", warna: "" });
   };
 
@@ -31,10 +31,7 @@ const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout,
               <p className="font-semibold text-sm">{username}</p>
             </div>
             <div className="h-8 w-px bg-[#998fc7]/30"></div>
-            <button 
-              onClick={onLogout} 
-              className="flex items-center gap-2 text-sm font-medium text-[#d4c2fc] hover:text-white transition-colors"
-            >
+            <button onClick={onLogout} className="flex items-center gap-2 text-sm font-medium text-[#d4c2fc] hover:text-white transition-colors">
               <LogOut size={18} /> Keluar
             </button>
           </div>
@@ -42,24 +39,19 @@ const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout,
       </nav>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        
         {/* Header Content */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[#28262c]">Dashboard Mobil</h1>
             <p className="text-[#998fc7] mt-1">Kelola inventaris kendaraan dengan mudah.</p>
           </div>
-          <button 
-            onClick={onViewLogs} 
-            className="flex items-center gap-2 bg-white text-[#14248a] border border-[#d4c2fc] px-5 py-2.5 rounded-xl font-medium hover:bg-[#f9f5ff] transition-all shadow-sm"
-          >
+          <button onClick={onViewLogs} className="flex items-center gap-2 bg-white text-[#14248a] border border-[#d4c2fc] px-5 py-2.5 rounded-xl font-medium hover:bg-[#f9f5ff] transition-all shadow-sm">
             <FileText size={18} />
             Lihat Log Aktivitas
           </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
           {/* Form Tambah Data (Kiri) */}
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-2xl shadow-md border border-[#d4c2fc]">
@@ -112,10 +104,7 @@ const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout,
                     />
                   </div>
                 </div>
-                <button 
-                  type="submit" 
-                  className="w-full mt-4 bg-[#14248a] text-white py-3 rounded-xl font-bold hover:bg-[#28262c] transition-all shadow-md"
-                >
+                <button type="submit" className="w-full mt-4 bg-[#14248a] text-white py-3 rounded-xl font-bold hover:bg-[#28262c] transition-all shadow-md">
                   Simpan Data
                 </button>
               </form>
@@ -145,24 +134,14 @@ const Dashboard = ({ username, cars, onAddCar, onEditCar, onDeleteCar, onLogout,
                           </td>
                           <td className="px-6 py-4 text-sm font-medium text-[#28262c]">{car.tahun}</td>
                           <td className="px-6 py-4">
-                            <span className="inline-block px-3 py-1 text-xs font-medium bg-[#f9f5ff] text-[#14248a] border border-[#d4c2fc] rounded-full">
-                              {car.warna}
-                            </span>
+                            <span className="inline-block px-3 py-1 text-xs font-medium bg-[#f9f5ff] text-[#14248a] border border-[#d4c2fc] rounded-full">{car.warna}</span>
                           </td>
                           <td className="px-6 py-4 text-center">
                             <div className="flex justify-center gap-2">
-                              <button 
-                                onClick={() => onEditCar(car)} 
-                                className="p-2 text-[#998fc7] hover:text-[#14248a] hover:bg-[#f9f5ff] rounded-lg transition-colors"
-                                title="Edit"
-                              >
+                              <button onClick={() => onEditCar(car)} className="p-2 text-[#998fc7] hover:text-[#14248a] hover:bg-[#f9f5ff] rounded-lg transition-colors" title="Edit">
                                 <Edit2 size={18} />
                               </button>
-                              <button 
-                                onClick={() => onDeleteCar(car)} 
-                                className="p-2 text-[#998fc7] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Hapus"
-                              >
+                              <button onClick={() => onDeleteCar(car)} className="p-2 text-[#998fc7] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
                                 <Trash2 size={18} />
                               </button>
                             </div>

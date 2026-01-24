@@ -87,7 +87,7 @@ app.get("/cars", (req, res) => {
 app.post("/cars", (req, res) => {
   const { merek, model, tahun, warna, username } = req.body;
   const ip = getClientIp(req);
-  const token = crypto.randomUUID(); // Token UUID Aman
+  const token = crypto.randomUUID(); // Token UUID
 
   const query = `INSERT INTO cars (token, merek, model, tahun, warna) VALUES (?, ?, ?, ?, ?)`;
 
@@ -99,7 +99,7 @@ app.post("/cars", (req, res) => {
 
     // Kirim balik data yang baru disimpan
     const newCar = { id: this.lastID, token, merek, model, tahun, warna };
-    addLog("ADD", `Menambah ${merek} ${model} (Token: ${token})`, username, ip);
+    addLog("ADD", `Menambah ${merek} ${model} (Token: ${token})`, username || "Guest", ip);
     res.json({ success: true, car: newCar });
   });
 });
@@ -110,10 +110,14 @@ app.put("/cars/:token", (req, res) => {
   const { merek, model, tahun, warna, username } = req.body;
   const ip = getClientIp(req);
 
+  // Debug log untuk memastikan username diterima
+  console.log("UPDATE Request:", { token, merek, model, tahun, warna, username, ip });
+
   const query = `UPDATE cars SET merek = ?, model = ?, tahun = ?, warna = ? WHERE token = ?`;
 
   db.run(query, [merek, model, tahun, warna, token], function (err) {
     if (err) {
+      console.error("Update error:", err);
       res.status(500).json({ error: err.message });
       return;
     }
@@ -122,7 +126,11 @@ app.put("/cars/:token", (req, res) => {
       return res.status(404).json({ success: false, message: "Mobil tidak ditemukan" });
     }
 
-    addLog("UPDATE", `Update data token: ${token}`, username, ip);
+    // Perbaiki: Pastikan username dicatat di log
+    const loggedUsername = username || "Guest";
+    addLog("UPDATE", `Update data ${merek} ${model} (Token: ${token})`, loggedUsername, ip);
+
+    console.log("Update success, log created for user:", loggedUsername);
     res.json({ success: true });
   });
 });
@@ -130,7 +138,7 @@ app.put("/cars/:token", (req, res) => {
 // 5. DELETE CAR (DELETE BY TOKEN)
 app.delete("/cars/:token", (req, res) => {
   const { token } = req.params;
-  const { username } = req.query; // Username dari query params
+  const { username } = req.query;
   const ip = getClientIp(req);
 
   // Ambil data dulu untuk log sebelum dihapus
@@ -146,7 +154,7 @@ app.delete("/cars/:token", (req, res) => {
         return;
       }
 
-      addLog("DELETE", `Hapus data ${row.merek} (Token: ${token})`, username, ip);
+      addLog("DELETE", `Hapus data ${row.merek} ${row.model} (Token: ${token})`, username || "Guest", ip);
       res.json({ success: true });
     });
   });
